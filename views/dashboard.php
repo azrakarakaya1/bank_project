@@ -1,6 +1,8 @@
 <!-- admin/visitor dashboard -->
 
 <?php
+session_start();
+
 include "../includes/session.php";
 
 if (!isset($_SESSION['name']) || !isset($_SESSION['role'])) {

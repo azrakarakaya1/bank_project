@@ -1,5 +1,3 @@
-<!--processes login request: login.php -->
-
 <?php
 // Start session
 if (session_status() === PHP_SESSION_NONE) {
@@ -29,29 +27,34 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $admin = $result->fetch_assoc();
 
             if (password_verify($password, $admin['password'])) {
+                $_SESSION['loggedin'] = true;  // ✅ Set here
                 $_SESSION['role'] = 'admin';
                 $_SESSION['name'] = $admin['first_name'] . ' ' . $admin['last_name'];
                 header("Location: views/dashboard.php");
                 exit();
-            } else {
+            } 
+            else {
                 header("Location: views/login_form.php?error=Incorrect+password");
                 exit();
             }
-        } else {
+        } 
+        else {
             header("Location: views/login_form.php?error=Admin+not+found");
             exit();
         }
 
     // --- Visitor Login ---
-    } elseif (isset($_POST['visitor_login'])) {
+    } 
+    elseif (isset($_POST['visitor_login'])) {
+        $_SESSION['loggedin'] = true;  // ✅ Set here
         $_SESSION['role'] = 'visitor';
         $_SESSION['name'] = 'Visitor';
         header("Location: views/dashboard.php");
         exit();
     }
 
-} else {
-    // If accessed directly without POST
+}
+else {
     header("Location: views/login_form.php?error=Invalid+request");
     exit();
 }
