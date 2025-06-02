@@ -1,7 +1,12 @@
-// admin/visitor dashboard
+<!-- admin/visitor dashboard -->
 
 <?php
 include "../includes/session.php";
+
+if (!isset($_SESSION['name']) || !isset($_SESSION['role'])) {
+    header("Location: ../login.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -12,15 +17,15 @@ include "../includes/session.php";
 </head>
 <body>
     <h2>Banking Record Control Panel</h2>
-    <h3>Welcome, <?php echo $_SESSION['name']; ?>!</h3>
-    <p>You are logged in as: <strong><?php echo $_SESSION['role']; ?></strong></p>
+    <h3>Welcome, <?php echo htmlspecialchars($_SESSION['name']); ?>!</h3>
+    <p>You are logged in as: <strong><?php echo htmlspecialchars($_SESSION['role']); ?></strong></p>
 
     <div class="dashboard">
         <h3>Overview</h3>
         <ul>
             <li><a href="transaction_records.php">View Transactions</a></li>
             <li><a href="accounts.php">View Accounts</a></li>
-            <li><a href="profile.php"></a>Profile</li>
+            <li><a href="profile.php">Profile</a></li>
         </ul>
 
         <?php if ($_SESSION['role'] === 'admin'): ?>

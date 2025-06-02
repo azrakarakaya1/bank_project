@@ -1,4 +1,4 @@
-// session management
+<!-- session management -->
 
 <?php
 session_start();
