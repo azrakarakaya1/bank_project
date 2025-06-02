@@ -51,6 +51,6 @@ include "../includes/db.php";
     ?>
   </table>
 
-  <a href="main.php">Back to Dashboard</a>
+  <a href="dashboard.php">Back to Dashboard</a>
 </body>
 </html>

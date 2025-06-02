@@ -3,7 +3,7 @@ include "../includes/session.php";
 include "../includes/db.php";
 
 if ($_SESSION['role'] !== 'admin') {
-  header("Location: main.php");
+  header("Location: dashboard.php");
   exit();
 }
 
@@ -30,6 +30,6 @@ $admin = $result->fetch_assoc();
   <p><strong>Name:</strong> <?php echo $_SESSION['name']; ?></p>
   <img src="../<?php echo $admin['photo']; ?>" width="100" height="100" alt="Profile Photo">
   <br>
-  <a href="main.php">Back to Dashboard</a>
+  <a href="dashboard.php">Back to Dashboard</a>
 </body>
 </html>

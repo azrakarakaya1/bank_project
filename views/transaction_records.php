@@ -1,7 +1,7 @@
 <!-- Transaction records page -->
 
 <?php
-include "../include/sessions.php";
+include "../include/session.php";
 include "../includes/db.php";
 ?>
 
@@ -33,7 +33,7 @@ include "../includes/db.php";
             LEFT JOIN transaction_tag_link ttl ON t.id = ttl.transaction_id
             LEFT JOIN transaction_tags tt ON ttl.tag_id = tt.id
             GROUP BY t.id
-            GROUN BY t.id DESC
+            ORDER BY t.id DESC
         ";
         $result = $conn->query($query);
 
@@ -49,6 +49,6 @@ include "../includes/db.php";
         ?>
     </table>
     
-    <a href="main.php">Back to Dashboard</a>
+    <a href="dashboard.php">Back to Dashboard</a>
 </body>
 </html>
