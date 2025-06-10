@@ -8,6 +8,6 @@ session_start();
 session_destroy();
 
 // Redirect to login form instead of index.php
-header("Location: views/login_form.html");
+header("Location: views/login_form.php");
 exit();
 ?>

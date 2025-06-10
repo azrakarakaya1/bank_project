@@ -1,6 +1,5 @@
 <!-- Transaction records page -->
-
-
+ 
 <?php
 include "../includes/session.php";
 include "../includes/db.php";
@@ -97,6 +96,11 @@ include "../includes/db.php";
             color: #6c757d;
         }
         
+        .date-cell {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
         .empty-state {
             text-align: center;
             padding: 40px;
@@ -166,8 +170,8 @@ include "../includes/db.php";
         }
         
         @media (max-width: 600px) {
-            .records-table th:nth-child(n+4),
-            .records-table td:nth-child(n+4) {
+            .records-table th:nth-child(n+5),
+            .records-table td:nth-child(n+5) {
                 display: none;
             }
         }
@@ -181,7 +185,7 @@ include "../includes/db.php";
         </div>
         
         <div class="table-info">
-            <p><strong>Info:</strong> This table shows all transaction records including sender, receiver, amounts, and associated tags.</p>
+            <p><strong>Info:</strong> This table shows all transaction records including sender, receiver, amounts, dates, and associated tags.</p>
         </div>
         
         <div class="table-container">
@@ -192,36 +196,43 @@ include "../includes/db.php";
                         <th>Amount</th>
                         <th>Sender</th>
                         <th>Receiver</th>
-                        <th>Tags</th>
+                        <th>Date</th>
+                        <th>Tag</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php
+                    // Fixed query with correct column names and proper JOIN
                     $query = "
-                        SELECT t.id, t.amount,
-                            CONCAT(t.sender_name, ' (', t.sender_type, ')') AS sender,
-                            CONCAT(t.receiver_name, ' (', t.receiver_type, ')') AS receiver,
-                            GROUP_CONCAT(tt.name) AS tags
+                        SELECT 
+                            t.transaction_id,
+                            t.amount,
+                            CONCAT(t.sender_name, ' (', ot1.type_name, ')') AS sender,
+                            CONCAT(t.receiver_name, ' (', ot2.type_name, ')') AS receiver,
+                            t.date,
+                            tt.name AS tag_name
                         FROM transaction t
-                        LEFT JOIN transaction_tag_link ttl ON t.id = ttl.transaction_id
-                        LEFT JOIN transaction_tags tt ON ttl.tag_id = tt.id
-                        GROUP BY t.id
-                        ORDER BY t.id DESC
+                        LEFT JOIN owner_type ot1 ON t.sender_type = ot1.type_id
+                        LEFT JOIN owner_type ot2 ON t.receiver_type = ot2.type_id
+                        LEFT JOIN transaction_tags tt ON t.tag_id = tt.tag_id
+                        ORDER BY t.transaction_id DESC
                     ";
+                    
                     $result = $conn->query($query);
                     
                     if ($result && $result->num_rows > 0) {
                         while ($row = $result->fetch_assoc()) {
                             echo "<tr>
-                                    <td class='id-cell'>#{$row['id']}</td>
+                                    <td class='id-cell'>#{$row['transaction_id']}</td>
                                     <td class='amount-cell'>$" . number_format($row['amount'], 2) . "</td>
                                     <td>" . htmlspecialchars($row['sender']) . "</td>
                                     <td>" . htmlspecialchars($row['receiver']) . "</td>
-                                    <td class='tags-cell'>" . ($row['tags'] ? htmlspecialchars($row['tags']) : 'No tags') . "</td>
+                                    <td class='date-cell'>" . date('M j, Y H:i', strtotime($row['date'])) . "</td>
+                                    <td class='tags-cell'>" . ($row['tag_name'] ? htmlspecialchars($row['tag_name']) : 'No tag') . "</td>
                                  </tr>";
                         }
                     } else {
-                        echo "<tr><td colspan='5' class='empty-state'>No transaction records found.</td></tr>";
+                        echo "<tr><td colspan='6' class='empty-state'>No transaction records found.</td></tr>";
                     }
                     ?>
                 </tbody>
