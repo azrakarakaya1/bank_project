@@ -9,7 +9,7 @@
 <body>
     <div class="container">
     <h2 class="page-title">Banking Record Control Panel</h2>
-    <form action="login.php" method="post">
+    <form action="../index.php" method="post">
         <h3 class="admin-title">Login as Admin</h3>
         <p class="input-title"><strong>Username:</strong></p>
         <input type="text" name="username" placeholder="username" required>
@@ -19,12 +19,10 @@
     </form>
     </div>
     <div class="visitor-section">
-    <form action="login.php" method="post">
+    <form action="../index.php" method="post">
         <button type="submit" name="visitor_login" class="visitor-btn">I'm just a visitor</button>
     </form>
     </div>
-
     <?php include "../includes/error_message.php"; ?>
-
 </body>
 </html>
